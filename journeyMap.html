@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>DnD Adventure Map</title>
+        <style>
+           
+        </style>
+        <script>
+            var zoom = false;
+
+            function mapSize(){
+                if(zoom == false){
+                    //Get mouse position
+                    var mouseX = event.clientX;
+                    var mouseY = event.clientY;
+                    var winWidth = window.innerWidth;
+                    var winHeight = window.innerHeight;
+                    var ratio = Math.abs(winHeight / winWidth);
+                    var test = winHeight - mouseY;
+                    var test2 = winWidth - mouseX;
+                    var posX = mouseX / winWidth
+                    var posY = mouseY / winHeight
+                    var temp = posX * 2 - 0.5
+                    if(temp > 1)
+                        temp = 1
+                    if(temp < 0)
+                        temp = 0
+                    
+                    document.getElementById("background").style.width = "200%";
+                    document.getElementById("background").style.height = "200%";                    
+                    
+                    //should calculate the ratio and divide by that
+                    window.scrollTo(temp * winWidth, mouseY * ratio);
+                    
+                    zoom = true;
+                } else {
+                    document.getElementById("background").style.width = "100%";
+                    document.getElementById("background").style.height = "99.4vh";
+                    zoom = false;
+                }
+            }
+        </script>
+    </head>
+    <body style="margin:0;">
+        <div  onclick="mapSize()">
+            <img id="background" src="images/map.jpg" style="width: 100%; height: 99.4vh; background-size: cover;" />
+        </div>
+
+        
+        
+    </body>
+</html>
