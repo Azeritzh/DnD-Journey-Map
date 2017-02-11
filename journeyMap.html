@@ -3,52 +3,26 @@
 
     <head>
         <meta charset="utf-8">
-        <title>DnD Adventure Map</title>
+        <title>DnD Interaktive Journey Map</title>
         <style>
            
         </style>
         <script>
-            var zoom = false;
-
-            function mapSize(){
-                if(zoom == false){
-                    //Get mouse position
-                    var mouseX = event.clientX;
-                    var mouseY = event.clientY;
-                    var winWidth = window.innerWidth;
-                    var winHeight = window.innerHeight;
-                    var ratio = Math.abs(winHeight / winWidth);
-                    var test = winHeight - mouseY;
-                    var test2 = winWidth - mouseX;
-                    var posX = mouseX / winWidth
-                    var posY = mouseY / winHeight
-                    var temp = posX * 2 - 0.5
-                    if(temp > 1)
-                        temp = 1
-                    if(temp < 0)
-                        temp = 0
-                    
-                    document.getElementById("background").style.width = "200%";
-                    document.getElementById("background").style.height = "200%";                    
-                    
-                    //should calculate the ratio and divide by that
-                    window.scrollTo(temp * winWidth, mouseY * ratio);
-                    
-                    zoom = true;
-                } else {
-                    document.getElementById("background").style.width = "100%";
-                    document.getElementById("background").style.height = "99.4vh";
-                    zoom = false;
-                }
+            function startMap() {
+                var c = document.getElementById("backgroundCanvas");
+                var ctx = c.getContext("2d");
+                var img = new Image();
+                img.src = "images/map.jpg"
+                ctx.imageSmoothingEnabled = false;
+                ctx.drawImage(img, 0, 0, 1700, 900);
             }
+
+            window.onload = startMap
         </script>
     </head>
     <body style="margin:0;">
-        <div  onclick="mapSize()">
-            <img id="background" src="images/map.jpg" style="width: 100%; height: 99.4vh; background-size: cover;" />
-        </div>
-
-        
-        
+        <canvas id="backgroundCanvas" width="1700" height="900" style="border:1px solid black;">
+            <img id="background" src="images/map.jpg" />
+        </canvas>
     </body>
 </html>
