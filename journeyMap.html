@@ -3,26 +3,86 @@
 
     <head>
         <meta charset="utf-8">
-        <title>DnD Interaktive Journey Map</title>
+        <title>DnD Interactive Journey Map</title>
         <style>
            
         </style>
-        <script>
-            function startMap() {
-                var c = document.getElementById("backgroundCanvas");
-                var ctx = c.getContext("2d");
-                var img = new Image();
-                img.src = "images/map.jpg"
-                ctx.imageSmoothingEnabled = false;
-                ctx.drawImage(img, 0, 0, 1700, 900);
-            }
-
-            window.onload = startMap
-        </script>
     </head>
     <body style="margin:0;">
-        <canvas id="backgroundCanvas" width="1700" height="900" style="border:1px solid black;">
+        <canvas id="backgroundCanvas" style="display: block;">
             <img id="background" src="images/map.jpg" />
         </canvas>
     </body>
+    <script>
+        window.onload = function(){
+            redraw()
+        }
+
+        //variables
+        var state = {
+            x: 0,
+            y: 0
+        }
+        var backgrCanvas = document.getElementById("backgroundCanvas");
+        var ctx = backgrCanvas.getContext("2d");
+        var mouseX;
+        var mouseY;
+        var img = new Image();
+        img.src = "images/map.jpg"
+        var dragging = false;
+        var mouseclicked = false;
+
+        function redraw(){
+            ctx.clearRect(0, 0, backgrCanvas.width, backgrCanvas.height )
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(img, state.x, state.y);
+
+
+        }
+
+        backgrCanvas.addEventListener("mousedown", function(event){
+            dragging = false;
+            mouseclicked = true;
+            getMouseClickPos(event);
+        })
+
+        backgrCanvas.addEventListener("mouseup", function(){
+            mouseclicked = false;
+        })
+
+        backgrCanvas.addEventListener("mousemove", function(event){
+            if(mouseclicked == true){
+                dragging = true;
+                getMouseDragPos(event);
+                redraw();
+            } else {
+                dragging = false;
+            }
+        })
+
+        function getMouseClickPos(event){
+            mouseX = event.x;
+            mouseY = event.y;
+        }
+
+        function getMouseDragPos(event){
+            var posDifferenceX = event.x - mouseX;
+            var posDifferenceY = event.y - mouseY;
+            mouseX = event.x;
+            mouseY = event.y;
+
+            state.x = state.x + posDifferenceX
+            state.y = state.y + posDifferenceY
+        }
+
+
+        window.addEventListener("resize", resizeCanvas, false);
+
+        function resizeCanvas(){
+            backgrCanvas.width = window.innerWidth
+            backgrCanvas.height = window.innerHeight
+            redraw()
+        }
+        resizeCanvas()
+    </script>
 </html>
