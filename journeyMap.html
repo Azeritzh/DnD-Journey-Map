@@ -45,7 +45,7 @@
         backgrCanvas.addEventListener("mousedown", function(event){
             dragging = false;
             mouseclicked = true;
-            getMouseClickPos(event);
+            getMousePos(event);
         })
         backgrCanvas.addEventListener("mouseup", function(){
             mouseclicked = false;
@@ -60,17 +60,19 @@
             }
         })
         backgrCanvas.addEventListener("mousewheel", function(event){
-            if(event.wheelDelta > 0){
-                mouseUpScroll = false;
-                state.zoom *= 1.2;
-            } else{
-                mouseUpScroll = true;
-                state.zoom /= 1.2;
-            }
+            var zoomfactor = event.wheelDelta > 0 ? 1.25 : 0.8;
+            state.zoom *= zoomfactor;
+
+            getMousePos(event);
+            var posDifferenceX = state.x - mouseX;
+            var posDifferenceY = state.y - mouseY;
+            state.x = mouseX + zoomfactor * posDifferenceX;
+            state.y = mouseY + zoomfactor * posDifferenceY;
+
             redraw();
         })
 
-        function getMouseClickPos(event){
+        function getMousePos(event){
             mouseX = event.x;
             mouseY = event.y;
         }
