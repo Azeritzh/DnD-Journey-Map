@@ -32,6 +32,7 @@
         var dragging = false;
         var mouseclicked = false;
 
+        //Redraws the canvas after events
         function redraw(){
             ctx.clearRect(0, 0, backgrCanvas.width, backgrCanvas.height )
             ctx.imageSmoothingEnabled = false;
@@ -40,20 +41,19 @@
 
         }
 
+        //Eventlisteners for mouse events
         backgrCanvas.addEventListener("mousedown", function(event){
             dragging = false;
             mouseclicked = true;
             getMouseClickPos(event);
         })
-
         backgrCanvas.addEventListener("mouseup", function(){
             mouseclicked = false;
         })
-
         backgrCanvas.addEventListener("mousemove", function(event){
             if(mouseclicked == true){
                 dragging = true;
-                getMouseDragPos(event);
+                updateDragmap(event);
                 redraw();
             } else {
                 dragging = false;
@@ -65,7 +65,8 @@
             mouseY = event.y;
         }
 
-        function getMouseDragPos(event){
+        //Updates Position for map when dragged
+        function updateDragmap(event){
             var posDifferenceX = event.x - mouseX;
             var posDifferenceY = event.y - mouseY;
             mouseX = event.x;
@@ -75,7 +76,7 @@
             state.y = state.y + posDifferenceY
         }
 
-
+        //Handles the redrawing of the canvas when the window resizes
         window.addEventListener("resize", resizeCanvas, false);
 
         function resizeCanvas(){
