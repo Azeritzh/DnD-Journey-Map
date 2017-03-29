@@ -41,6 +41,12 @@
         var mouseclicked = false
         var mouseUpScroll = false
 
+        var mapPoints = [
+            [2835,1960], //Pitchfield
+            [2862,2450], //Ekul
+            [1093,2226] //Hokar
+            ]
+
         //Redraws the canvas after events
         function redraw(){
             ctx.clearRect(0, 0, backgrCanvas.width, backgrCanvas.height)
@@ -53,7 +59,10 @@
         function drawPoints(){
             actCtx.clearRect(0, 0, actCanvas.width, actCanvas.height)
             actCtx.imageSmoothingEnabled = false
-            actCtx.drawImage(pointImg, state.x, state.y, 30 * state.zoom, 30 * state.zoom)
+            for(i = 0; i< mapPoints.length; i++){
+                actCtx.drawImage(pointImg, state.x + (mapPoints[i][0] * state.zoom), state.y + (mapPoints[i][1] * state.zoom), 30 * state.zoom, 30 * state.zoom)
+            }
+            
         }
 
         //Eventlisteners for mouse events
