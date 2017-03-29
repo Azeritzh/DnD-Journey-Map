@@ -15,6 +15,9 @@
         <canvas id="actionCanvas" style="display: block; position: absolute; pointer-events: none;">
 
         </canvas>
+        <canvas id="storyCanvas" style="display: block; position: absolute; pointer-events: none;">
+
+        </canvas>
     </body>
     <script>
         window.onload = function(){
@@ -31,6 +34,8 @@
         var ctx = backgrCanvas.getContext("2d")
         var actCanvas = document.getElementById("actionCanvas")
         var actCtx = actCanvas.getContext("2d")
+        var storCanvas = document.getElementById("storyCanvas")
+        var storCtx = storCanvas.getContext("2d")
         var mouseX
         var mouseY
         var img = new Image()
@@ -62,7 +67,18 @@
             for(i = 0; i< mapPoints.length; i++){
                 actCtx.drawImage(pointImg, state.x + (mapPoints[i][0] * state.zoom), state.y + (mapPoints[i][1] * state.zoom), 30 * state.zoom, 30 * state.zoom)
             }
-            
+        }
+
+        //Check map location and open area information box
+        function mapLocation(){
+            for(i = 0; i < mapPoints.length; i++){
+                if(mouseX > state.x + (mapPoints[i][0] * state.zoom) - 30 * state.zoom &&
+                   mouseX < state.x + (mapPoints[i][0] * state.zoom) + 30 * state.zoom &&
+                   mouseY > state.y + (mapPoints[i][1] * state.zoom) - 30 * state.zoom &&
+                   mouseY < state.y + (mapPoints[i][1] * state.zoom) + 30 * state.zoom){
+                    storCtx.fillRect(0,0,500,300);
+                }
+            }
         }
 
         //Eventlisteners for mouse events
@@ -73,6 +89,7 @@
         })
         backgrCanvas.addEventListener("mouseup", function(){
             mouseclicked = false
+            mapLocation()
         })
         backgrCanvas.addEventListener("mousemove", function(event){
             if(mouseclicked == true){
@@ -120,6 +137,8 @@
             backgrCanvas.height = window.innerHeight
             actCanvas.width = window.innerWidth
             actCanvas.height = window.innerHeight
+            storCanvas.width = window.innerWidth
+            storCanvas.height = window.innerHeight
             redraw()
         }
         resizeCanvas()
