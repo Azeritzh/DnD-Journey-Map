@@ -9,8 +9,11 @@
         </style>
     </head>
     <body style="margin:0;">
-        <canvas id="backgroundCanvas" style="display: block;">
+        <canvas id="backgroundCanvas" style="display: block; position: absolute;">
             <img id="background" src="images/map.jpg" />
+        </canvas>
+        <canvas id="actionCanvas" style="display: block; position: absolute; pointer-events: none;">
+
         </canvas>
     </body>
     <script>
@@ -24,76 +27,90 @@
             y: 0,
             zoom: 1
         }
-        var backgrCanvas = document.getElementById("backgroundCanvas");
-        var ctx = backgrCanvas.getContext("2d");
-        var mouseX;
-        var mouseY;
-        var img = new Image();
+        var backgrCanvas = document.getElementById("backgroundCanvas")
+        var ctx = backgrCanvas.getContext("2d")
+        var actCanvas = document.getElementById("actionCanvas")
+        var actCtx = actCanvas.getContext("2d")
+        var mouseX
+        var mouseY
+        var img = new Image()
         img.src = "images/map.jpg"
-        var dragging = false;
-        var mouseclicked = false;
-        var mouseUpScroll = false;
+        var pointImg = new Image()
+        pointImg.src = "images/point.png"
+        var dragging = false
+        var mouseclicked = false
+        var mouseUpScroll = false
 
         //Redraws the canvas after events
         function redraw(){
-            ctx.clearRect(0, 0, backgrCanvas.width, backgrCanvas.height )
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(img, state.x, state.y, img.width * state.zoom, img.height * state.zoom);
+            ctx.clearRect(0, 0, backgrCanvas.width, backgrCanvas.height)
+            ctx.imageSmoothingEnabled = false
+            ctx.drawImage(img, state.x, state.y, img.width * state.zoom, img.height * state.zoom)
+            drawPoints()
+        }
+
+        //Draws points on map
+        function drawPoints(){
+            actCtx.clearRect(0, 0, actCanvas.width, actCanvas.height)
+            actCtx.imageSmoothingEnabled = false
+            actCtx.drawImage(pointImg, state.x, state.y, 30 * state.zoom, 30 * state.zoom)
         }
 
         //Eventlisteners for mouse events
         backgrCanvas.addEventListener("mousedown", function(event){
-            dragging = false;
-            mouseclicked = true;
-            getMousePos(event);
+            dragging = false
+            mouseclicked = true
+            getMousePos(event)
         })
         backgrCanvas.addEventListener("mouseup", function(){
-            mouseclicked = false;
+            mouseclicked = false
         })
         backgrCanvas.addEventListener("mousemove", function(event){
             if(mouseclicked == true){
-                dragging = true;
-                updateDragmap(event);
-                redraw();
+                dragging = true
+                updateDragmap(event)
+                redraw()
             } else {
-                dragging = false;
+                dragging = false
             }
         })
         backgrCanvas.addEventListener("mousewheel", function(event){
-            var zoomfactor = event.wheelDelta > 0 ? 1.25 : 0.8;
-            state.zoom *= zoomfactor;
+            var zoomfactor = event.wheelDelta > 0 ? 1.25 : 0.8
+            state.zoom *= zoomfactor
 
             getMousePos(event);
-            var posDifferenceX = state.x - mouseX;
-            var posDifferenceY = state.y - mouseY;
-            state.x = mouseX + zoomfactor * posDifferenceX;
-            state.y = mouseY + zoomfactor * posDifferenceY;
+            var posDifferenceX = state.x - mouseX
+            var posDifferenceY = state.y - mouseY
+            state.x = mouseX + zoomfactor * posDifferenceX
+            state.y = mouseY + zoomfactor * posDifferenceY
 
-            redraw();
+            redraw()
         })
 
         function getMousePos(event){
-            mouseX = event.x;
-            mouseY = event.y;
+            mouseX = event.x
+            mouseY = event.y
         }
 
         //Updates Position for map when dragged
         function updateDragmap(event){
-            var posDifferenceX = event.x - mouseX;
-            var posDifferenceY = event.y - mouseY;
-            mouseX = event.x;
-            mouseY = event.y;
+            var posDifferenceX = event.x - mouseX
+            var posDifferenceY = event.y - mouseY
+            mouseX = event.x
+            mouseY = event.y
 
             state.x = state.x + posDifferenceX
             state.y = state.y + posDifferenceY
         }
 
         //Handles the redrawing of the canvas when the window resizes
-        window.addEventListener("resize", resizeCanvas, false);
+        window.addEventListener("resize", resizeCanvas, false)
 
         function resizeCanvas(){
             backgrCanvas.width = window.innerWidth
             backgrCanvas.height = window.innerHeight
+            actCanvas.width = window.innerWidth
+            actCanvas.height = window.innerHeight
             redraw()
         }
         resizeCanvas()
