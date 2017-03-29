@@ -12,12 +12,8 @@
         <canvas id="backgroundCanvas" style="display: block; position: absolute;">
             <img id="background" src="images/map.jpg" />
         </canvas>
-        <canvas id="actionCanvas" style="display: block; position: absolute; pointer-events: none;">
-
-        </canvas>
-        <canvas id="storyCanvas" style="display: block; position: absolute; pointer-events: none;">
-
-        </canvas>
+        <canvas id="actionCanvas" style="display: block; position: absolute; pointer-events: none;"></canvas>
+        <canvas id="storyCanvas" style="display: block; position: absolute; pointer-events: none;"></canvas>
     </body>
     <script>
         window.onload = function(){
@@ -76,7 +72,7 @@
                    mouseX < state.x + (mapPoints[i][0] * state.zoom) + 30 * state.zoom &&
                    mouseY > state.y + (mapPoints[i][1] * state.zoom) - 30 * state.zoom &&
                    mouseY < state.y + (mapPoints[i][1] * state.zoom) + 30 * state.zoom){
-                    storCtx.fillRect(0,0,500,300);
+                    storCtx.fillRect(storCanvas.width/2 - 500/2, storCanvas.height/2 - 300/2, 500, 300);
                 }
             }
         }
